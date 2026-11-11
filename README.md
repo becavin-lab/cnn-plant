@@ -48,22 +48,24 @@ Tester en local : `python3 -m http.server 8000` dans ce dossier, puis ouvrir htt
 Régénérer les poids : `python3 outils/convert.py plantnet_resnet18.pth plantnet300K_species_id_2_name.json model`
 (fichiers téléchargeables sur la page Hugging Face ci-dessus).
 
-## Photos d'exemple (réponses attendues du modèle)
+## Photos d'exemple : réponses du site (corrigé)
 
-| Photo | Vraie espèce | Dans la base ? | 1re proposition du modèle |
-|---|---|---|---|
-| 1 | *Papaver rhoeas* (coquelicot) | oui | *Papaver rhoeas*, > 99 % ✔ |
-| 2 | *Papaver dubium* (pavot douteux) | oui | *Papaver dubium*, 98 % ✔ |
-| 3 | *Lavandula stoechas* | oui | *Lavandula stoechas*, > 99 % ✔ |
-| 4 | *Cirsium vulgare* | oui | *Cirsium vulgare*, > 99 % ✔ |
-| 5 | *Fragaria vesca* (fruit) | oui | *Fragaria vesca*, 89 % ✔ |
-| 6 | *Hypericum perforatum* | oui | *Hypericum maculatum*, 67 % ✘ (bonne réponse au rang 2) |
-| 7 | *Lamium purpureum* | oui | *Lamium purpureum*, > 99 % ✔ |
-| 8 | *Calendula officinalis* | oui | *Calendula officinalis*, 98 % ✔ |
-| 9 | *Tagetes patula* (œillet d'Inde) | oui | *Tagetes erecta*, > 99 % ✘ (rang 2) : confiant **et** faux |
-| 10 | *Taraxacum officinale* (pissenlit) | **non** | *Calendula officinalis*, 52 % |
-| 11 | *Bellis perennis* (pâquerette) | **non** | *Calendula officinalis*, 74 % |
-| 12 | Dahlia (cultivé) | **non** | *Tagetes patula*, 89 % |
-| 13 | un chat | **non** | *Lagenaria siceraria* (calebasse), 75 % |
+Valeurs affichées par le site dans le navigateur (vérifiées sur la version en ligne).
+
+| Photo | Vraie espèce | Dans la base ? | 1re proposition du modèle | Rang de la bonne réponse |
+|---|---|---|---|---|
+| 1 | *Papaver rhoeas* (coquelicot) | oui | *Papaver rhoeas*, > 99 % ✔ | 1 |
+| 2 | *Papaver dubium* (pavot douteux) | oui | *Papaver dubium*, 97 % ✔ | 1 |
+| 3 | *Lavandula stoechas* (lavande stéchade) | oui | *Lavandula stoechas*, > 99 % ✔ | 1 |
+| 4 | *Cirsium vulgare* (cirse commun) | oui | *Cirsium vulgare*, > 99 % ✔ | 1 |
+| 5 | *Fragaria vesca* (fraisier des bois, fruit) | oui | *Fragaria vesca*, 64 % ✔ | 1 |
+| 6 | *Hypericum perforatum* (millepertuis perforé) | oui | *Hypericum maculatum*, 85 % ✘ | 2 |
+| 7 | *Lamium purpureum* (lamier pourpre) | oui | *Lamium purpureum*, > 99 % ✔ | 1 |
+| 8 | *Calendula officinalis* (souci officinal) | oui | *Calendula officinalis*, 98 % ✔ | 1 |
+| 9 | *Tagetes patula* (œillet d'Inde) | oui | *Tagetes erecta*, > 99 % ✘ : confiant **et** faux | 2 |
+| 10 | *Taraxacum officinale* (pissenlit) | **non** | *Calendula officinalis*, 56 % | — |
+| 11 | *Bellis perennis* (pâquerette) | **non** | *Calendula officinalis*, 80 % | — |
+| 12 | Dahlia (plante cultivée) | **non** | *Tagetes patula*, 89 % | — |
+| 13 | un chat | **non** | *Lagenaria siceraria* (calebasse), 64 % | — |
 
 Crédits photos : voir `examples/examples.json` (Wikimedia Commons, CC BY / CC BY-SA ; dahlia : vultilion, CC BY 2.0 ; chat : S. van der Walt, CC0).

@@ -102,16 +102,17 @@
   "file": "ex12.jpg",
   "label": "Photo 12",
   "truth": "Dahlia sp.",
-  "common": "Dahlia (plante cultivée)",
+  "common": "Dahlia",
   "in_base": false,
   "credit": "vultilion · CC BY 2.0 · Flickr (via scikit-learn)",
-  "source": "https://www.flickr.com/photos/vultilion/6056698931/"
+  "source": "https://www.flickr.com/photos/vultilion/6056698931/",
+  "note": "plante cultivée"
  },
  {
   "file": "ex13.jpg",
   "label": "Photo 13",
-  "truth": "— (un chat)",
-  "common": "Ce n'est pas une plante",
+  "truth": "—",
+  "common": "un chat",
   "in_base": false,
   "credit": "Stéfan van der Walt · CC0 (via scikit-image)",
   "source": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.chelsea"

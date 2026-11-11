@@ -361,8 +361,11 @@ function afficherResultat() {
       h += `<div class="verite">Vraie espèce : <strong><em>${exemple.truth}</em></strong> (${exemple.common}).
         Rang dans la réponse du modèle : <strong>${rang}</strong>${rang === 1 ? " : bonne réponse." : " : le modèle s'est trompé."}</div>`;
     } else {
-      h += `<div class="verite absente">Vraie réponse : <strong>${exemple.common}</strong>${exemple.truth.startsWith("—") ? "" : ` (<em>${exemple.truth}</em>)`}.
-        Elle <strong>ne fait pas partie</strong> des 1 081 espèces du modèle : il ne pouvait pas la trouver, et il a pourtant répondu.</div>`;
+      h += exemple.truth === "—"
+        ? `<div class="verite absente">Ce n'est <strong>pas une plante</strong> : c'est ${exemple.common}.
+            Le modèle ne connaît que 1 081 espèces de plantes : il ne pouvait pas avoir raison, et il a pourtant répondu.</div>`
+        : `<div class="verite absente">Vraie espèce : <strong>${exemple.common}</strong> (<em>${exemple.truth}</em>${exemple.note ? ", " + exemple.note : ""}).
+            Elle <strong>ne fait pas partie</strong> des 1 081 espèces du modèle : il ne pouvait pas la trouver, et il a pourtant répondu.</div>`;
     }
   } else if ($("#reveler").checked && !exemple) {
     h += `<p class="note">Vraie espèce inconnue : c'est votre photo. À vous de vérifier avec une flore ou une clé de détermination.</p>`;
