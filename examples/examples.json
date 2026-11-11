@@ -1,0 +1,119 @@
+[
+ {
+  "file": "ex01.jpg",
+  "label": "Photo 1",
+  "truth": "Papaver rhoeas",
+  "common": "Coquelicot",
+  "in_base": true,
+  "credit": "Robert Flogaus-Faust · CC BY 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Papaver_rhoeas_RF.jpg"
+ },
+ {
+  "file": "ex02.jpg",
+  "label": "Photo 2",
+  "truth": "Papaver dubium",
+  "common": "Pavot douteux",
+  "in_base": true,
+  "credit": "Rudolphous · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Papaver_dubium_(Bleke_klaproos)_-_Noordwijk,_Dompad.jpg"
+ },
+ {
+  "file": "ex03.jpg",
+  "label": "Photo 3",
+  "truth": "Lavandula stoechas",
+  "common": "Lavande stéchade",
+  "in_base": true,
+  "credit": "Hans Hillewaert · CC BY-SA 3.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Lavandula_stoechas_(flower).jpg"
+ },
+ {
+  "file": "ex04.jpg",
+  "label": "Photo 4",
+  "truth": "Cirsium vulgare",
+  "common": "Cirse commun",
+  "in_base": true,
+  "credit": "Pseudopanax at English Wikipedia · Public domain · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Cirsium_vulgare_flower_head_(shallow_depth_of_field).jpg"
+ },
+ {
+  "file": "ex05.jpg",
+  "label": "Photo 5",
+  "truth": "Fragaria vesca",
+  "common": "Fraisier des bois",
+  "in_base": true,
+  "credit": "Ermell · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Walderdbeere_Frucht-20210617-RM-124006.jpg"
+ },
+ {
+  "file": "ex06.jpg",
+  "label": "Photo 6",
+  "truth": "Hypericum perforatum",
+  "common": "Millepertuis perforé",
+  "in_base": true,
+  "credit": "Didier Descouens · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:(MHNT)_Hypericum_perforatum_flower_and_buttons.jpg"
+ },
+ {
+  "file": "ex07.jpg",
+  "label": "Photo 7",
+  "truth": "Lamium purpureum",
+  "common": "Lamier pourpre",
+  "in_base": true,
+  "credit": "Ermell · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Purpurrote_Taubnessel_(Lamium_purpureum)_focus_stacking-20230410-RM-123652.jpg"
+ },
+ {
+  "file": "ex08.jpg",
+  "label": "Photo 8",
+  "truth": "Calendula officinalis",
+  "common": "Souci officinal",
+  "in_base": true,
+  "credit": "Ermell · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Ringelblume_(Calendula_officinalis)_Bl%C3%BCte_focus_stack-20220619-RM-165610.jpg"
+ },
+ {
+  "file": "ex09.jpg",
+  "label": "Photo 9",
+  "truth": "Tagetes patula",
+  "common": "Œillet d'Inde",
+  "in_base": true,
+  "credit": "Jim Evans · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:French_Marigold_--_October_Birthday_Flower_--_Tagetes_patula.jpg"
+ },
+ {
+  "file": "ex10.jpg",
+  "label": "Photo 10",
+  "truth": "Taraxacum officinale",
+  "common": "Pissenlit",
+  "in_base": false,
+  "credit": "Ivar Leidus · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Bombus_ruderarius_-_Taraxacum_officinale_-_Keila.jpg"
+ },
+ {
+  "file": "ex11.jpg",
+  "label": "Photo 11",
+  "truth": "Bellis perennis",
+  "common": "Pâquerette",
+  "in_base": false,
+  "credit": "August Geyler · CC BY-SA 4.0 · Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Bellis_perennis_%E2%80%93_Flower.jpg"
+ },
+ {
+  "file": "ex12.jpg",
+  "label": "Photo 12",
+  "truth": "Dahlia sp.",
+  "common": "Dahlia (plante cultivée)",
+  "in_base": false,
+  "credit": "vultilion · CC BY 2.0 · Flickr (via scikit-learn)",
+  "source": "https://www.flickr.com/photos/vultilion/6056698931/"
+ },
+ {
+  "file": "ex13.jpg",
+  "label": "Photo 13",
+  "truth": "— (un chat)",
+  "common": "Ce n'est pas une plante",
+  "in_base": false,
+  "credit": "Stéfan van der Walt · CC0 (via scikit-image)",
+  "source": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.chelsea"
+ }
+]

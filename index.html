@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Identifier une plante avec un réseau convolutif (CNN)</title>
+  <meta name="description" content="TP interactif : comprendre un réseau de neurones convolutif (CNN) et l'utiliser pour identifier une plante sur une photo, directement dans le navigateur.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="plantes.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+<header class="entete">
+  <div class="contenu">
+    <h1>🌿 Identifier une plante sur une photo avec un réseau convolutif (CNN)</h1>
+    <p class="sous-titre">Compétence Transversale IA · L3 Sciences de la Vie · parcours BOE</p>
+    <p class="statut" id="statut">Chargement du modèle (23 Mo)… <span class="chargement"><div id="barre-chargement"></div></span></p>
+  </div>
+</header>
+
+<div class="navigation">
+  <nav class="parties" aria-label="Parties du site">
+    <button data-partie="cours">🧠 Comprendre le modèle <small>cours</small></button>
+    <button data-partie="classer">🌿 Identifier une plante <small>TP</small></button>
+  </nav>
+  <nav class="etapes" id="etapes" aria-label="Étapes du cours">
+    <button data-etape="1">1. Données</button>
+    <button data-etape="2">2. Convolution</button>
+    <button data-etape="3">3. Pooling</button>
+    <button data-etape="4">4. Modèle</button>
+    <button data-etape="5">5. Sous le capot</button>
+    <button data-etape="6">6. Questions</button>
+  </nav>
+</div>
+
+<main class="contenu">
+
+<!-- ======================================================= 1. Données -->
+<section id="etape-1" hidden>
+  <h2>1. Les données : des photos de plantes</h2>
+  <p>Le modèle a été entraîné sur <strong>Pl@ntNet-300K</strong>, un extrait de la base participative Pl@ntNet :
+     des photos prises par des citoyens et dont l'espèce a été <strong>validée par la communauté</strong>.</p>
+  <div class="tuiles">
+    <div class="tuile"><span class="valeur">306 146</span><span>photos</span></div>
+    <div class="tuile"><span class="valeur">1 081</span><span>espèces</span></div>
+    <div class="tuile"><span class="valeur">303</span><span>genres</span></div>
+    <div class="tuile"><span class="valeur arythmie">11 %</span><span>des photos pour 80 % des espèces</span></div>
+  </div>
+  <p class="note">La dernière tuile décrit la <strong>longue traîne</strong> : quelques espèces communes ont des milliers de photos,
+     la grande majorité n'en a que quelques-unes (Garcin et al., NeurIPS 2021).</p>
+
+  <h3 class="sous-partie">1.1 Une image, c'est un tableau de nombres</h3>
+  <div class="carte">
+    <p>Choisissez une photo. Le modèle ne la voit pas comme nous : elle est recadrée au centre, réduite à
+       <strong>224 × 224 pixels</strong>, et chaque pixel est codé par <strong>3 nombres</strong> (rouge, vert, bleu, de 0 à 255).
+       Passez la souris sur l'image (ou touchez-la) pour lire les valeurs.</p>
+    <div class="photo-choix" data-choix-photo></div>
+    <div class="deux-colonnes">
+      <div><canvas id="c224" class="px" width="224" height="224" style="width:100%;max-width:448px"></canvas>
+        <div id="pxinfo">&nbsp;</div></div>
+      <div>
+        <p class="note" style="margin-top:0">Zoom sur les 6 × 6 pixels autour du curseur (valeurs R / V / B) :</p>
+        <table class="zoomtab" id="zoom"></table>
+        <div class="tuiles petites">
+          <div class="tuile"><span class="valeur">224 × 224</span><span>pixels</span></div>
+          <div class="tuile"><span class="valeur">150 528</span><span>nombres par photo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="a-vous">✍️ <strong>À vous :</strong> comparez le nombre de valeurs d'une photo (150 528) avec celui d'un battement d'ECG (140).
+     Un pixel isolé a-t-il un sens ? Qu'est-ce qui, dans une photo, permet de reconnaître une espèce ?</p>
+  <div class="suite"><button class="primaire" data-aller="2">Étape suivante : la convolution →</button></div>
+</section>
+
+<!-- ======================================================= 2. Convolution -->
+<section id="etape-2" hidden>
+  <h2>2. La convolution : un filtre qui glisse sur l'image</h2>
+  <p>Un réseau convolutif ne regarde pas tous les pixels d'un coup : il fait glisser un petit <strong>filtre</strong> (ici 3 × 3)
+     sur toute l'image. À chaque position, il <strong>multiplie</strong> les 9 pixels par les 9 valeurs du filtre et <strong>additionne</strong>.
+     Le résultat est une nouvelle image, la <strong>carte de caractéristiques</strong>, qui s'allume là où le motif cherché est présent.</p>
+  <div class="carte">
+    <div class="photo-choix" data-choix-photo></div>
+    <div class="reglages">
+      <label class="reglage">Filtre
+        <select id="filtre-choix">
+          <option value="vert">Bords verticaux</option>
+          <option value="horiz">Bords horizontaux</option>
+          <option value="contour">Contours (toutes directions)</option>
+          <option value="flou">Flou (moyenne)</option>
+          <option value="nettete">Netteté</option>
+          <option value="perso">Mon filtre (modifiez les cases)</option>
+        </select></label>
+      <div class="reglage">Valeurs du filtre
+        <div class="filtre-grille" id="filtre-grille"></div></div>
+    </div>
+    <div class="cartes-conv">
+      <figure><canvas id="conv-entree" class="px" width="224" height="224"></canvas>
+        <figcaption>Image en niveaux de gris (0 à 255)</figcaption></figure>
+      <figure><canvas id="conv-sortie" class="px" width="224" height="224"></canvas>
+        <figcaption>Carte de caractéristiques (clair = forte réponse). <strong>Cliquez</strong> pour voir le calcul.</figcaption></figure>
+    </div>
+    <div class="calcul" id="calcul">Cliquez sur la carte de caractéristiques pour détailler le calcul en un point.</div>
+  </div>
+  <p class="note">Dans un vrai CNN, on ne choisit pas les valeurs des filtres : ce sont des <strong>poids appris</strong> pendant l'entraînement.
+     Et le <strong>même filtre</strong> est appliqué partout : un motif est détecté où qu'il soit dans l'image.</p>
+  <p class="a-vous">✍️ <strong>À vous :</strong> quel filtre fait ressortir les contours des pétales ? Que donne le filtre « contours » sur le fond flou ?
+     Inventez un filtre : que se passe-t-il si toutes ses valeurs sont positives ? si leur somme vaut 0 ?</p>
+  <div class="suite"><button data-aller="1">← Données</button><button class="primaire" data-aller="3">Étape suivante : le pooling →</button></div>
+</section>
+
+<!-- ======================================================= 3. Pooling -->
+<section id="etape-3" hidden>
+  <h2>3. Le pooling : résumer et réduire</h2>
+  <p>Après une convolution, on réduit souvent la carte par <strong>max pooling</strong> : on la découpe en blocs de 2 × 2
+     et on ne garde que la <strong>valeur la plus forte</strong> de chaque bloc. La carte est divisée par 2 dans chaque direction :
+     moins de calcul, et un réseau plus tolérant aux petits décalages.</p>
+  <div class="carte">
+    <p class="resume" id="pool-resume"></p>
+    <div class="pool" id="pool"></div>
+  </div>
+  <p class="a-vous">✍️ <strong>À vous :</strong> après trois max pooling, la carte ne fait plus que 28 × 28. Que perd-on ? Que garde-t-on ?
+     Reconnaît-on encore où se trouvent les contours ?</p>
+  <div class="suite"><button data-aller="2">← Convolution</button><button class="primaire" data-aller="4">Étape suivante : le modèle →</button></div>
+</section>
+
+<!-- ======================================================= 4. Modèle -->
+<section id="etape-4" hidden>
+  <h2>4. Le modèle : un ResNet18</h2>
+  <p>Le modèle empile des couches de <strong>convolution</strong> (+ ReLU) et de <strong>pooling</strong> : l'image devient plus petite mais
+     plus « profonde » (de plus en plus de cartes). Les premières couches détectent des bords et des couleurs, les suivantes des textures,
+     puis des motifs (pétales, nervures)… La dernière couche, <strong>dense</strong>, donne un score par espèce,
+     transformé en probabilités par la fonction <strong>softmax</strong>.</p>
+  <div class="carte">
+    <div id="schema" class="schema"></div>
+    <p>Nombre total de poids appris : <strong id="nb-params">–</strong>
+       <span class="note">(le LSTM du chapitre 3 en avait 4 897)</span></p>
+  </div>
+  <div class="carte">
+    <h3>D'où viennent ces poids ? L'apprentissage par transfert</h3>
+    <p>Le réseau a d'abord été entraîné sur <strong>ImageNet</strong> (plus d'un million de photos d'objets du quotidien), puis
+       <strong>ré-entraîné</strong> sur les 243 916 photos d'entraînement de Pl@ntNet-300K, avec 1 081 sorties, une par espèce.
+       Justesse annoncée sur les photos de test : la bonne espèce est <strong>en tête dans ~76 %</strong> des cas,
+       et <strong>parmi les 5 premières dans ~94 %</strong> des cas.</p>
+    <p class="note">Entraîner un tel réseau prend des heures sur une carte graphique : ici, on utilise le modèle déjà entraîné.</p>
+  </div>
+  <div class="carte">
+    <h3>Les 64 filtres appris par la première couche</h3>
+    <p class="note">Chaque carré est un filtre de 7 × 7 pixels × 3 couleurs. Personne ne les a dessinés : ils ont été appris.
+       Beaucoup détectent des bords dans une direction, d'autres des contrastes de couleur (vert / magenta, bleu / jaune…).</p>
+    <div class="filtres64" id="filtres64"></div>
+  </div>
+  <p class="a-vous">✍️ <strong>À vous :</strong> retrouvez parmi les 64 filtres des détecteurs de bords verticaux, horizontaux, obliques.
+     Ressemblent-ils aux filtres de l'étape 2 ?</p>
+  <div class="suite"><button data-aller="3">← Pooling</button><button class="primaire" data-aller="5">Étape suivante : sous le capot →</button></div>
+</section>
+
+<!-- ======================================================= 5. Sous le capot -->
+<section id="etape-5" hidden>
+  <h2>5. Sous le capot : ce que « voient » les couches</h2>
+  <p>On fait passer la photo dans le réseau et on regarde, à chaque étape, les <strong>8 cartes les plus actives</strong>.
+     Le calcul (≈ 1,8 milliard d'opérations) se fait <strong>dans votre navigateur</strong> : quelques secondes.</p>
+  <div class="carte">
+    <div class="photo-choix" data-choix-photo></div>
+    <div class="actions">
+      <button class="primaire" id="lancer-capot" disabled>▶ Faire passer la photo dans le réseau</button>
+      <span class="note" id="etat-capot"></span>
+    </div>
+    <div class="progression"><div id="barre-capot"></div></div>
+    <div class="couches" id="couches"></div>
+  </div>
+  <p class="a-vous">✍️ <strong>À vous :</strong> à quelle étape reconnaît-on encore la forme de la fleur ? À partir de quand les cartes
+     deviennent-elles impossibles à interpréter pour nous ? Pourquoi dit-on que le réseau est une « boîte noire » ?</p>
+  <div class="suite"><button data-aller="4">← Modèle</button><button class="primaire" data-aller="6">Étape suivante : questions →</button></div>
+</section>
+
+<!-- ======================================================= 6. Questions -->
+<section id="etape-6" hidden>
+  <h2>6. Questions à discuter</h2>
+  <ol class="questions">
+    <li>Pourquoi un réseau convolutif convient-il mieux aux images qu'un réseau « dense » où chaque neurone voit tous les pixels ?
+      <details><summary>Piste</summary>Comptez les poids : 150 528 entrées × 1 000 neurones. Et si le pétale est décalé de 10 pixels ?
+        Revoyez l'étape 2 : le même filtre est appliqué partout.</details></li>
+    <li>Le modèle connaît 1 081 espèces. Que répond-il face à une plante qui n'en fait pas partie ? Face à une photo qui n'est pas une plante ?
+      <details><summary>Piste</summary>Dans « Identifier une plante », essayez les photos 10 à 13. La somme des probabilités vaut toujours 100 %…</details></li>
+    <li>Un score de 100 % garantit-il que la réponse est juste ?
+      <details><summary>Piste</summary>Essayez la photo 9 et cochez « Révéler la vraie espèce ».</details></li>
+    <li>Pourquoi le modèle confond-il certaines espèces d'un même genre ?
+      <details><summary>Piste</summary>Photos 6 et 9. Quels critères un botaniste utiliserait-il ? Sont-ils visibles sur la photo ?</details></li>
+    <li>Les espèces rares sont-elles aussi bien reconnues que les espèces communes ?
+      <details><summary>Piste</summary>Étape 1 : 80 % des espèces ne représentent que 11 % des photos d'entraînement.</details></li>
+    <li>Le modèle « comprend »-il la botanique, ou reconnaît-il des motifs dans des pixels ?
+      <details><summary>Piste</summary>Sait-il ce qu'est un pétale ou une feuille opposée ? Que nous montrent les cartes de l'étape 5 ?</details></li>
+  </ol>
+  <div class="suite"><button data-aller="5">← Sous le capot</button><button class="primaire" data-aller="classer">Identifier une plante →</button></div>
+</section>
+
+<!-- ======================================================= Identifier une plante (TP) -->
+<section id="classer" hidden>
+  <h2>Identifier une plante</h2>
+  <p>Le site utilise un <strong>modèle déjà entraîné</strong> (ResNet18, 1 081 espèces). Déposez une photo de plante, ou choisissez une
+     photo d'exemple : le modèle propose les <strong>5 espèces les plus probables</strong>. Votre photo reste sur votre ordinateur :
+     <strong>rien n'est envoyé sur internet</strong>.</p>
+  <div class="vide" id="classer-attente">Chargement du modèle…</div>
+  <div id="classer-pret" hidden>
+    <div class="deux-colonnes etroite">
+      <div class="carte">
+        <h3>Choisir une photo</h3>
+        <label class="depot" id="depot">
+          <input type="file" id="fichier" accept="image/*">
+          <span>📷 Déposez ici une photo de plante<br><small>(un seul organe, net et bien cadré) ou cliquez pour la choisir</small></span>
+        </label>
+        <label class="reglage">… ou une photo d'exemple
+          <select id="exemple"><option value="">(choisir)</option></select></label>
+        <label><input type="checkbox" id="reveler"> Révéler la vraie espèce</label>
+        <canvas id="apercu-tp" width="224" height="224" hidden></canvas>
+        <p class="credit" id="credit"></p>
+      </div>
+      <div class="carte">
+        <div id="resultat-tp"><div class="vide">Choisissez une photo pour lancer l'identification.</div></div>
+      </div>
+    </div>
+    <div class="carte">
+      <h3>Les 1 081 espèces connues du modèle</h3>
+      <p class="note">Votre espèce est-elle dans la liste ? Si elle n'y est pas, le modèle ne <strong>peut pas</strong> la trouver.</p>
+      <input id="recherche" placeholder="Rechercher un genre ou une espèce (ex. Papaver)" style="padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;width:min(420px,100%)">
+      <span class="note" id="nb-trouves"></span>
+      <div class="liste-especes" id="liste-especes"></div>
+    </div>
+  </div>
+  <p class="a-vous">✍️ <strong>À vous :</strong> pour chaque photo d'exemple, notez l'espèce proposée en tête, son score, puis cochez
+     « Révéler la vraie espèce » et notez le <strong>rang</strong> de la bonne réponse. Le score élevé garantit-il une bonne réponse ?
+     Que se passe-t-il pour les espèces absentes de la liste ?</p>
+  <div class="suite"><button data-aller="1">← Comment fonctionne ce modèle ?</button></div>
+</section>
+</main>
+<footer class="pied contenu">
+  Données : Pl@ntNet-300K (Garcin et al., NeurIPS 2021), issu de l'observatoire participatif Pl@ntNet.
+  Modèle : ResNet18 ré-entraîné sur Pl@ntNet-300K (cpoisson/plantnet300k-resnet18, licence Apache-2.0) ; modèle indépendant, non produit par l'équipe Pl@ntNet.
+  Calcul : réseau de neurones écrit à la main en JavaScript (js/cnn.js), exécuté dans votre navigateur.
+  Photos d'exemple : Wikimedia Commons, Flickr et scikit-image, sous licences libres (auteurs indiqués sous chaque photo).
+  Outil pédagogique : l'IA propose, le naturaliste valide.
+</footer>
+</body>
+</html>

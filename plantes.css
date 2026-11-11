@@ -1,0 +1,50 @@
+/* Compléments propres au site « plantes » (le reste vient de style.css, identique au site ECG) */
+.px { image-rendering: pixelated; border-radius: 8px; border: 1px solid var(--bord); max-width: 100%; }
+.photo-choix { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.photo-choix button { padding: 0; border: 3px solid transparent; border-radius: 8px; overflow: hidden; width: 74px; height: 74px; background: #fff; }
+.photo-choix button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-choix button[aria-pressed="true"] { border-color: var(--bleu); }
+#pxinfo, .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9rem; }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; border: 1px solid #0002; }
+.zoomtab td { width: 50px; height: 50px; text-align: center; font-size: .7rem; line-height: 1.15; border: 1px solid #fff; font-family: ui-monospace, Consolas, monospace; }
+.zoomtab { border-collapse: collapse; }
+.filtre-grille { display: grid; grid-template-columns: repeat(3, 58px); gap: 4px; margin: 6px 0; }
+.filtre-grille input { width: 58px; text-align: center; padding: 6px 2px; border: 1px solid #cbd5e1; border-radius: 6px; }
+.cartes-conv { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; align-items: start; }
+.cartes-conv figure, .pool figure { margin: 0; }
+.cartes-conv figcaption, .pool figcaption { font-size: .85rem; color: var(--doux); margin-top: 4px; }
+.cartes-conv canvas { width: 100%; cursor: crosshair; }
+.calcul { background: #f1f5f9; border-radius: 8px; padding: 10px 12px; font-size: .88rem; overflow-x: auto; }
+.calcul table { border-collapse: collapse; margin: 4px 8px 4px 0; display: inline-table; vertical-align: middle; }
+.calcul td { border: 1px solid #cbd5e1; width: 40px; text-align: center; padding: 2px; background: #fff; }
+.calcul td.f { background: #eff6ff; color: var(--bleu); font-weight: 700; }
+.pool { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+.pool canvas { image-rendering: pixelated; border-radius: 6px; }
+.bloc.conv { border-color: #7c3aed; background: #f5f3ff; }
+.bloc.dense { border-color: #ea580c; background: #fff7ed; }
+.bloc small { color: var(--doux); }
+.filtres64 { display: grid; grid-template-columns: repeat(16, 1fr); gap: 3px; max-width: 640px; }
+.filtres64 canvas { width: 100%; aspect-ratio: 1; image-rendering: pixelated; border-radius: 2px; }
+.couches { display: flex; flex-direction: column; gap: 14px; }
+.couche h3 { margin: 0; } .couche p { margin: 2px 0 6px; }
+.cartes8 { display: flex; flex-wrap: wrap; gap: 6px; }
+.cartes8 canvas { width: 92px; height: 92px; image-rendering: pixelated; border-radius: 4px; background: #000; }
+table.pred { border-collapse: collapse; width: 100%; }
+table.pred td { padding: 7px 6px; border-bottom: 1px solid var(--bord); vertical-align: middle; }
+table.pred td.rang { width: 26px; color: var(--doux); font-weight: 700; }
+table.pred td.nom { font-style: italic; }
+table.pred td.nom small { font-style: normal; color: var(--doux); display: block; font-size: .8rem; }
+table.pred td.barre-p { width: 34%; }
+table.pred tr.vrai td.nom { color: #15803d; font-weight: 700; }
+.pbar { height: 14px; border-radius: 4px; background: var(--bleu); min-width: 2px; }
+.pval { font-weight: 700; white-space: nowrap; }
+.verdict-p { border-radius: 8px; padding: 10px 14px; margin: 8px 0 10px; }
+.verdict-p.haut { background: #dcfce7; } .verdict-p.moyen { background: #fef3c7; } .verdict-p.bas { background: #fee2e2; }
+.verite { border-left: 4px solid #15803d; background: #f0fdf4; padding: 8px 12px; border-radius: 6px; margin: 8px 0; }
+.verite.absente { border-color: var(--rouge); background: #fef2f2; }
+#apercu-tp { width: 100%; border-radius: 8px; border: 1px solid var(--bord); }
+.liste-especes { columns: 3 220px; font-size: .88rem; font-style: italic; max-height: 300px; overflow: auto; margin-top: 8px; }
+.liste-especes div { break-inside: avoid; }
+.credit { font-size: .78rem; color: var(--doux); }
+.chargement { display: inline-block; width: 160px; height: 8px; background: var(--bord); border-radius: 4px; overflow: hidden; vertical-align: middle; margin-left: 8px; }
+.chargement > div { height: 100%; width: 0; background: #fff; }
