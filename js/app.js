@@ -263,7 +263,7 @@ worker.onmessage = (e) => {
     if (m.total) $("#barre-chargement").style.width = (100 * m.recu / m.total) + "%";
   } else if (m.type === "pret") {
     S.pret = true;
-    $("#statut").textContent = `✔ Modèle ResNet18 chargé : 1 081 espèces · calcul sur votre ordinateur, rien n'est envoyé sur internet`;
+    $("#statut").textContent = `✔ Modèle ResNet18 chargé : 1 081 espèces`;
     dessinerFiltres(m.filtres, m.forme);
     $("#lancer-capot").disabled = false;
     $("#classer-attente").hidden = true; $("#classer-pret").hidden = false;
@@ -333,7 +333,7 @@ async function depuisFichier(f) {
 async function identifier(im, exemple) {
   const cv = $("#apercu-tp"); cv.hidden = false;
   const rgba = vers224(im, cv);
-  $("#credit").innerHTML = exemple ? `Photo : ${exemple.credit} · <a href="${exemple.source}" target="_blank" rel="noopener">source</a>` : "Votre photo (non envoyée sur internet).";
+  $("#credit").innerHTML = exemple ? `Photo : ${exemple.credit} · <a href="${exemple.source}" target="_blank" rel="noopener">source</a>` : "Votre photo.";
   S.tp = { exemple };
   $("#resultat-tp").innerHTML = `<p class="note">Calcul en cours dans votre navigateur…</p><div class="progression"><div id="barre-tp"></div></div>`;
   const r = await predire(rgba, false, (p) => { const b = $("#barre-tp"); if (b) b.style.width = (100 * p) + "%"; });
